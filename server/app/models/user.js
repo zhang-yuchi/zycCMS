@@ -9,7 +9,21 @@ const {
 } = require('sequelize')
 
 class User extends Model {
-
+    static async insertAdmin() {
+        await User.findOne({
+            where: {
+                id: 1
+            }
+        }).then(res => {
+            if (!res) {
+                User.create({
+                    id: 1,
+                    username: "admin",
+                    password: "admin"
+                })
+            }
+        })
+    }
 }
 if (db) {
     //若不设置主键,则sequelize会自动生成一个主键
@@ -20,8 +34,7 @@ if (db) {
             primaryKey: true, //设置主键 关系型数据库中重要的概念
             autoIncrement: true, //自动增长
         },
-        nickname: Sequelize.STRING,
-        email: Sequelize.STRING,
+        username: Sequelize.STRING,
         password: {
             type: Sequelize.STRING,
             set(val) {
@@ -33,11 +46,12 @@ if (db) {
         }
     }, {
         sequelize: db,
-        tableName: "user"
+        tableName: "cms_user"
     })
+    //若不存在管理员则添加管理员 id为1
+    User.insertAdmin()
+
 }
-
-
 
 module.exports = {
     User,

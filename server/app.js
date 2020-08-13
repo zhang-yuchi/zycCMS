@@ -5,6 +5,7 @@ const InitManager = require('./core/init')
 const config = require('./config/config')
 const cors = require('koa2-cors');
 const catchError = require('./middleware/catchException')
+
 app.use(cors())
 app.use(parser())
 app.use(catchError)

@@ -3,7 +3,7 @@ const {
   LinValidator,
   Rule
 } = require('lin-mizar');
-class databaseValidator extends LinValidator {
+class configValidator extends LinValidator {
   constructor() {
     super()
     this.dbname = [
@@ -26,8 +26,18 @@ class databaseValidator extends LinValidator {
         min: 1
       }),
     ]
+    this.expiresIn = [
+      new Rule('isOptional','',2592000),
+      new Rule('isInt','超时时间是一个数字')
+    ]
+    this.secretKey = [
+      new Rule('isOptional','',''),
+      new Rule('isLength','密钥长度不能低于7位',{
+        min:7
+      })
+    ]
   }
 }
 module.exports = {
-  databaseValidator
+  configValidator
 }

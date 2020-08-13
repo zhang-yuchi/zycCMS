@@ -10,7 +10,16 @@ class Success extends HttpException {
     this.data = data
   }
 }
+class DbError extends HttpException{
+  constructor(msg,errorCode){
+    super()
+    this.code = 500
+    this.msg = msg||'数据库错误'
+    this.errorCode = errorCode || 9999
+  }
+}
 module.exports = {
   HttpException,
-  Success
+  Success,
+  DbError
 }

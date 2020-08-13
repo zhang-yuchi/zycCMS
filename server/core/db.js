@@ -1,3 +1,4 @@
+const { DbError } = require('./httpException')
 const Sequelize = require('sequelize')
 // const sequelize = new Sequlize(dbName,user,password,{
 
@@ -31,12 +32,14 @@ if(dbName&&host&&port){
     //创建sequlize实例
     sequelize = new Sequelize(dbName, user, password, obj);
     
-    sequelize.authenticate().then(() => {
-            console.log('database connect successfully');
-        })
-        .catch(() => {
-            console.log('error');
-        })
+    // sequelize.authenticate().then(() => {
+    //         console.log('database connect successfully');
+    //     })
+    //     .catch(() => {
+            
+    //         console.log('error');
+    //         throw new DbError()
+    //     })
     sequelize.sync({
         //不能随便加,只有开发事才能用
         force: false //加上之后会先删除表之后再加上这个表(重新造表)

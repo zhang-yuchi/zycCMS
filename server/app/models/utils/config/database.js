@@ -5,7 +5,7 @@ class dataBase {
     this.dbname = v.get('body.dbname')
     this.dbport = v.get('body.dbport')
     this.username = v.get('body.username')
-    this.password = v.get('body.password')
+    this.password = v.get('body.password')||''
   }
 }
 module.exports = {

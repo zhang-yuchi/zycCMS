@@ -3,6 +3,7 @@ const catchError = async (ctx, next) => {
     try {
         await next()
     } catch (error) {
+        // console.log(error);
         //  开发环境下需要知道错误,而不是返回给客户端未知
         //  开发环境并且不是HttpException
         // const isDev = global.config.environment === 'dev'
@@ -15,7 +16,7 @@ const catchError = async (ctx, next) => {
                 url:`${ctx.method} ${ctx.path}`,
                 data:error.data
             }
-            ctx.status = error.code
+            ctx.status = 200
         } else {
             ctx.body = {
                 msg: "服务器开小差了",

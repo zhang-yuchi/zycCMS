@@ -10,7 +10,7 @@
     >
       <div class="title">数据库配置</div>
       <el-form-item label="数据库地址" label-width="100px" prop="host">
-        <el-input placeholder="请输入当前数据库地址"  v-model="ruleForm.host"></el-input>
+        <el-input placeholder="请输入当前数据库地址" v-model="ruleForm.host"></el-input>
       </el-form-item>
       <el-form-item label="数据库端口" label-width="100px" prop="dbport">
         <el-input placeholder="请输入当前数据库端口" v-model="ruleForm.dbport"></el-input>
@@ -22,10 +22,16 @@
         <el-input placeholder="请输入数据库用户名" v-model="ruleForm.username"></el-input>
       </el-form-item>
       <el-form-item label="密码" label-width="100px" prop="password">
-        <el-input placeholder="若无则跳过" type='password' v-model="ruleForm.password"></el-input>
+        <el-input placeholder="若无则跳过" type="password" v-model="ruleForm.password"></el-input>
       </el-form-item>
-
-      <el-form-item style="position:fixed;bottom:10px">
+      <div class="title">身份令牌配置(可选)</div>
+      <el-form-item label="超时时间" label-width="100px" prop="expiresIn">
+        <el-input placeholder="以秒为单位 默认一个月" v-model="ruleForm.expiresIn"></el-input>
+      </el-form-item>
+      <el-form-item label="密钥" label-width="100px" prop="secretKey">
+        <el-input placeholder="不填将使用默认密钥" type="password" v-model="ruleForm.secretKey"></el-input>
+      </el-form-item>
+      <el-form-item style="margin-top:20px;margin-bottom:0;">
         <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
@@ -37,7 +43,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import rule from "../../validator/config";
-import { putConfig } from 'internet/config'
+import { putConfig, getConfig, validateDb } from "internet/config";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -47,9 +53,11 @@ export default {
       ruleForm: {
         dbname: "",
         dbport: "",
-        host:"",
-        username:"",
-        password:""
+        host: "",
+        username: "",
+        password: "",
+        expiresIn: "",
+        secretKey: "",
       },
       rules: rule,
     };
@@ -63,13 +71,33 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          putConfig(this.ruleForm).then(res=>{
+          putConfig(this.ruleForm).then((res) => {
             console.log(res);
-          })
+          });
         } else {
           console.log("error submit!!");
           return false;
         }
+      });
+      setTimeout(() => {
+        validateDb().then((res) => {
+          console.log(res);
+          if(res.status==200){
+            this.$router.push('/login')
+          }
+        });
+      }, 4000);
+    },
+    initConfig() {
+      getConfig().then((res) => {
+        const db = res.data.db;
+        const security = res.data.security;
+        console.log(res);
+        this.ruleForm.dbname = db.dbName;
+        this.ruleForm.host = db.host;
+        this.ruleForm.dbport = db.port;
+        this.ruleForm.password = db.password;
+        this.ruleForm.username = db.user;
       });
     },
     resetForm(formName) {
@@ -79,7 +107,9 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.initConfig();
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前

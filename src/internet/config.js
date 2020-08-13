@@ -6,3 +6,6 @@ export const getConfig = () => {
 export const putConfig = (params)=>{
   return service.put('/config',params)
 }
+export const validateDb = ()=>{
+  return service.get('/config/db/success')
+}
