@@ -6,10 +6,10 @@
     <div class="login-form">
       <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
         <el-form-item label label-width="0">
-          <el-input v-model="formLabelAlign.name" placeholder="请输入用户名"></el-input>
+          <el-input v-model="formLabelAlign.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item label label-width="0">
-          <el-input v-model="formLabelAlign.region" placeholder="请输入密码"></el-input>
+          <el-input type="password" v-model="formLabelAlign.password" placeholder="请输入密码"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -25,7 +25,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import { login, loginVerify } from "internet/login";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -34,10 +34,10 @@ export default {
     return {
       labelPosition: "right",
       formLabelAlign: {
-        name: "",
-        region: "",
-        type: "",
+        username: "",
+        password: "",
       },
+      isShow: true,
     };
   },
   //监听属性 类似于data概念
@@ -47,14 +47,67 @@ export default {
   //方法集合
   methods: {
     userLogin() {
-      window.localStorage.setItem("token", 123);
-      this.$router.push("/");
+      // window.localStorage.setItem("token", 123);
+      // this.$router.push("/");
+      let comp = this.$toast({
+        content: "加载中",
+        type: "loading",
+      });
+      login(this.formLabelAlign)
+        .then((res) => {
+          // console.log(res);
+          if (res.status == 200) {
+            localStorage.setItem("token", res.data);
+            comp.hidden();
+            this.$router.push("/");
+          } else {
+            comp.hidden();
+            let msg = res.msg;
+            if (msg instanceof Array) {
+              msg = msg[0];
+            }
+            comp = this.$toast({
+              content: msg,
+              duration: 1500,
+            });
+          }
+        })
+        .finally(() => {
+          // comp.hidden();
+        });
+    },
+    verifyToken() {
+      //免登录
+      if (localStorage.getItem("token")) {
+        loginVerify().then((res) => {
+          // console.log(res);
+          if (res.status == 200) {
+            this.$router.replace("/");
+          } else {
+            //token不合法
+            var comp = this.$toast({
+              content: res.msg,
+              duration: 1500,
+            });
+          }
+        });
+      }
     },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    // var comp = this.$toast({
+    //   content: "加载中",
+    //   type: "loading",
+    // });
+    // setTimeout(()=>{
+    //   comp.hidden()
+    // },1000)
+
+    this.verifyToken();
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前

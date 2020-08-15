@@ -8,7 +8,6 @@ class InitManager {
         InitManager.app = app
         InitManager.loadConfig()
         InitManager.initLoadRouters()
-        
     }
     static initLoadRouters() {
         const apiDirectory = path.join(process.cwd(),'./server/app/api')

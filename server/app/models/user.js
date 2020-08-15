@@ -1,4 +1,6 @@
 const bcrypt = require('bcryptjs')
+const { NotFound, Forbidden  } = require('../../core/httpException')
+const { generateToken } = require('../../core/util')
 const {
     db
 } = require('../../core/db')
@@ -23,6 +25,22 @@ class User extends Model {
                 })
             }
         })
+    }
+    static async verify(account,password){
+        //校验密码和用户
+        const user = await User.findOne({
+            where:{
+                username:account
+            }
+        })
+        if(!user){
+            throw new NotFound("未找到该用户")
+        }
+        const correct = bcrypt.compareSync(password, user.password)
+        if(!correct){
+            throw new Forbidden("密码错误")
+        }
+        return user
     }
 }
 if (db) {
@@ -50,7 +68,6 @@ if (db) {
     })
     //若不存在管理员则添加管理员 id为1
     User.insertAdmin()
-
 }
 
 module.exports = {

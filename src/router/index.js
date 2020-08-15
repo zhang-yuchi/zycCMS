@@ -8,7 +8,21 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    children:[
+      {
+        path:"",
+        redirect:"/model"
+      },
+      {
+        path:"model",
+        component:()=>import('../views/models')
+      },
+      {
+        path:"user",
+        component:()=>import('../views/user')
+      }
+    ]
   },
   {
     path:"/login",

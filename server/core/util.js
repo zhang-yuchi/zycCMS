@@ -1,11 +1,10 @@
 const jwt = require('jsonwebtoken')
-const {
-  security
-} = require('../config/config')
+const config = require('../config/config')
 const {
   db
 } = require('./db')
 const {DbError} = require('./httpException')
+const security = config.server.security
 const generateToken = function (uid, scope) {
   const token = jwt.sign({
     uid,

@@ -5,6 +5,9 @@ const service = axios.create({
 })
 //请求处理
 service.interceptors.request.use((config) => {
+  config.headers = Object.assign({}, config.headers, {
+    token: localStorage.getItem('token')
+  })
   return config
 })
 //响应处理

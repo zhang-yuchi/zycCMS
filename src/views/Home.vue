@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    
+    <router-view />
   </div>
 </template>
 
@@ -10,6 +10,9 @@
 export default {
   name: 'Home',
   components: {
+    
+  },
+  mounted(){
     
   }
 }

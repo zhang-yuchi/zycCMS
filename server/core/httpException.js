@@ -18,8 +18,26 @@ class DbError extends HttpException{
     this.errorCode = errorCode || 9999
   }
 }
+class NotFound extends HttpException{
+  constructor(msg,errorCode){
+    super()
+    this.code = 404
+    this.msg = msg||"资源未找到"
+    this.errorCode = errorCode || 10000
+  }
+}
+class Forbidden extends HttpException{
+  constructor(msg,errorCode){
+    super()
+    this.code = 403
+    this.msg = msg||'禁止进入'
+    this.errorCode = errorCode || 10001
+  }
+}
 module.exports = {
   HttpException,
   Success,
-  DbError
+  DbError,
+  NotFound,
+  Forbidden
 }
