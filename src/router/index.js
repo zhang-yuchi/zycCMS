@@ -20,7 +20,15 @@ Vue.use(VueRouter)
       },
       {
         path:"user",
-        component:()=>import('../views/user')
+        component:()=>import('../views/user'),
+      },
+      {
+        path:"user/addModel",
+        component:()=>import('../views/addModel')
+      },
+      {
+        path:"user/importDb",
+        component:()=>import('../views/importDb')
       }
     ]
   },

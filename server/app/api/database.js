@@ -1,14 +1,18 @@
 const Router = require('koa-router')
-const auto = require('../../config/auto')
+const createAuto = require('../../config/auto')
+const { ImportValidator } = require('../validator/database')
+const { Success } = require('../../core/httpException')
 const router = new Router({
   prefix: '/database'
 })
-router.get('/import', async (ctx, next) => {
+router.post('/import', async (ctx, next) => {
   //导入数据库
-  auto.run(function (err) {
-    if (err) console.log(err);
-    // console.log(auto.tables); // table list
-    // console.log(auto.foreignKeys); // foreign key list
-  });
+  const v = await new ImportValidator().validate(ctx)
+  const auto = createAuto(v.get('body.isAll'),v.get('body.tables'))
+  auto.run((err)=>{
+    if(err)
+    console.log(err);
+  })
+  throw new Success()
 })
 module.exports = router

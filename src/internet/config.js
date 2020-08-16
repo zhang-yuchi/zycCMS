@@ -9,3 +9,6 @@ export const putConfig = (params)=>{
 export const validateDb = ()=>{
   return service.get('/config/db/success')
 }
+export const importDb = (params)=>{
+  return service.post('/database/import',params)
+}

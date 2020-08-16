@@ -121,6 +121,7 @@ export default {
 <style lang='less'>
 .login-page {
   // background-color: hotpink;
+  padding: 60px 36px 0 36px;
   .logo {
     width: 45px;
   }

@@ -3,9 +3,8 @@ const config = require('./config.json')
 const path = require('path')
 const db = config.server.database
 var SequelizeAuto = require('sequelize-auto')
-console.log(db);
-var auto = new SequelizeAuto(
-    db.dbName, db.user, db.password, {
+const createAuto = function(isAll,tables){
+    let config = {
         host: db.host,
         dialect: 'mysql',
         directory: path.join(__dirname,'../app/models/users'), // prevents the program from writing to disk
@@ -20,5 +19,18 @@ var auto = new SequelizeAuto(
             freezeTableName: true,
         }
     }
-)
-module.exports = auto
+    if(!isAll){
+        tables = tables.map(item=>{
+            return item.value
+        })
+        console.log('--------');
+        console.log(tables);
+        console.log('-------');
+        config.tables = tables
+    }
+    var auto = new SequelizeAuto(
+        db.dbName, db.user, db.password,config
+    )
+    return auto
+}
+module.exports = createAuto

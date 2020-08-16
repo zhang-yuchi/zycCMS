@@ -82,13 +82,17 @@ export default {
       setTimeout(() => {
         validateDb().then((res) => {
           console.log(res);
-          if(res.status==200){
-            this.$router.push('/login')
+          if (res.status == 200) {
+            this.$router.push("/login");
           }
         });
       }, 4000);
     },
     initConfig() {
+      let comp = this.$toast({
+        content: "加载中",
+        type: "loading",
+      });
       getConfig().then((res) => {
         const db = res.data.db;
         const security = res.data.security;
@@ -98,7 +102,9 @@ export default {
         this.ruleForm.dbport = db.port;
         this.ruleForm.password = db.password;
         this.ruleForm.username = db.user;
-      });
+      }).finally(()=>{
+        comp.hidden()
+      })
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -121,12 +127,15 @@ export default {
 };
 </script>
 <style lang='less'>
-.title {
-  margin-bottom: 18px;
-  font-size: 20px;
-  font-weight: bold;
-  padding-bottom: 18px;
-  color: #333;
-  border-bottom: 1px solid #dddddd;
+.config-page {
+  padding: 60px 36px 0 36px;
+  .title {
+    margin-bottom: 18px;
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 18px;
+    color: #333;
+    border-bottom: 1px solid #dddddd;
+  }
 }
 </style>
