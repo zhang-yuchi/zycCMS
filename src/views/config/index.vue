@@ -31,9 +31,10 @@
       <el-form-item label="密钥" label-width="100px" prop="secretKey">
         <el-input placeholder="不填将使用默认密钥" type="password" v-model="ruleForm.secretKey"></el-input>
       </el-form-item>
-      <el-form-item style="margin-top:20px;margin-bottom:0;">
+      <el-form-item style="margin-top:20px;margin-bottom:20px;">
         <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button v-if="!fromUser" @click="resetForm('ruleForm')">重置</el-button>
+        <el-button v-if="fromUser" @click='back'>返回</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -60,6 +61,7 @@ export default {
         secretKey: "",
       },
       rules: rule,
+      fromUser:false
     };
   },
   //监听属性 类似于data概念
@@ -93,22 +95,38 @@ export default {
         content: "加载中",
         type: "loading",
       });
-      getConfig().then((res) => {
-        const db = res.data.db;
-        const security = res.data.security;
-        console.log(res);
-        this.ruleForm.dbname = db.dbName;
-        this.ruleForm.host = db.host;
-        this.ruleForm.dbport = db.port;
-        this.ruleForm.password = db.password;
-        this.ruleForm.username = db.user;
-      }).finally(()=>{
-        comp.hidden()
-      })
+      getConfig()
+        .then((res) => {
+          const db = res.data.db;
+          const security = res.data.security;
+          console.log(res);
+          this.ruleForm.dbname = db.dbName;
+          this.ruleForm.host = db.host;
+          this.ruleForm.dbport = db.port;
+          this.ruleForm.password = db.password;
+          this.ruleForm.username = db.user;
+        })
+        .finally(() => {
+          comp.hidden();
+        });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
+    back(){
+      this.$router.back(-1)
+    }
+  },
+  beforeRouteEnter: (to, from, next) => {
+    console.log(from);
+    let flag = false
+    if(from.path=='/user'){
+      // this.fromUser = true
+      flag = true
+    }
+    next(vm=>{
+      vm.fromUser = flag
+    });
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},

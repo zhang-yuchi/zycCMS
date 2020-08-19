@@ -23,9 +23,6 @@ const createAuto = function(isAll,tables){
         tables = tables.map(item=>{
             return item.value
         })
-        console.log('--------');
-        console.log(tables);
-        console.log('-------');
         config.tables = tables
     }
     var auto = new SequelizeAuto(

@@ -5,7 +5,16 @@ const {
 const {
     Login
 } = require('../services/login')
-const { tokenValidator,verifyValidator } = require('../validator/user')
+const {
+    Info
+} = require('../services/info')
+const {
+    tokenValidator,
+    verifyValidator
+} = require('../validator/user')
+const {
+    Auth
+} = require('../../middleware/auth')
 const router = new Router({
     prefix: '/user'
 })
@@ -15,9 +24,13 @@ router.post('/login', async (ctx, next) => {
     // throw new Success(v.get('body.password'))
     await Login.token(v)
 })
-router.get('/login/verify',async(ctx,next)=>{
+router.get('/login/verify', async (ctx, next) => {
     const v = await new verifyValidator().validate(ctx)
     await Login.verify(v.get('header.token'))
+})
+router.get('/info', new Auth().m, async (ctx, next) => {
+    const user = await Info.getUserInfo(ctx.auth.uid)
+    throw new Success(user)
 })
 //注册 新增数据
 // router.post('/register', async (ctx, next) => {

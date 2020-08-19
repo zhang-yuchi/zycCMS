@@ -11,7 +11,6 @@ class InitManager {
     }
     static initLoadRouters() {
         const apiDirectory = path.join(process.cwd(),'./server/app/api')
-        console.log(process.cwd(),'./server/app/api');
         requireDirectory(module,apiDirectory,{
             visit:whenLoadMoudle
         })

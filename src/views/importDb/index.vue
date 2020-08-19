@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class="db-add-page">
-    <tips title="数据库导入">
+    <tips title="数据表导入">
       <p>将当前数据库中的表导入为model文件,可部分导入或全部导入</p>
       <p>开发过程中每次新建表或对表进行了修改都需要进行重新导入</p>
       <p>选择<strong>全部导入</strong>会导入当前数据库下所有表,重复表将会覆盖</p>
@@ -12,7 +12,7 @@
       label-width="100px"
       class="demo-dynamic"
     >
-      <el-form-item label="是否全部导入" prop="delivery">
+      <el-form-item label="全部导入" prop="delivery">
         <el-switch v-model="dynamicValidateForm.isAll"></el-switch>
       </el-form-item>
       <el-form-item
@@ -21,13 +21,14 @@
         :key="domain.key"
         :prop="'tables.' + index + '.value'"
         label-width='50px'
+        v-show="!dynamicValidateForm.isAll"
       >
         <el-input v-model="domain.value" placeholder='请输入表名' :disabled=dynamicValidateForm.isAll style="width:170px"></el-input>
         <el-button @click.prevent="removeDomain(domain)" style="width:80px" type='danger' :disabled=dynamicValidateForm.isAll>删除</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('dynamicValidateForm')">提交</el-button>
-        <el-button @click="addDomain" :disabled=dynamicValidateForm.isAll>新增表名</el-button>
+        <el-button @click="addDomain" v-show="!dynamicValidateForm.isAll" :disabled=dynamicValidateForm.isAll>新增表名</el-button>
         <!-- <el-button @click="resetForm('dynamicValidateForm')" :disabled=dynamicValidateForm.isAll>重置</el-button> -->
       </el-form-item>
     </el-form>

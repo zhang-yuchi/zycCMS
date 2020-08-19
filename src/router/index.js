@@ -29,6 +29,14 @@ Vue.use(VueRouter)
       {
         path:"user/importDb",
         component:()=>import('../views/importDb')
+      },
+      {
+        path:"user/tables",
+        component:()=>import('../views/tables')
+      },
+      {
+        path:"user/ModelSetting",
+        component:()=>import('../views/modelSetting')
       }
     ]
   },

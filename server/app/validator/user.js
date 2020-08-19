@@ -13,15 +13,24 @@ class tokenValidator extends LinValidator {
     ]
   }
 }
-class verifyValidator extends LinValidator {
-  constructor(){
+class AuthValidator extends LinValidator {
+  constructor() {
     super()
     this.token = [
-      
+      new Rule('isLength', 'token为必传参数', {
+        min: 1
+      })
     ]
+  }
+}
+class verifyValidator extends LinValidator {
+  constructor() {
+    super()
+    this.token = []
   }
 }
 module.exports = {
   tokenValidator,
-  verifyValidator
+  verifyValidator,
+  AuthValidator
 }

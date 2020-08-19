@@ -8,7 +8,7 @@ router.get('/modify',async (ctx,next)=>{
   fs.readFile(path.join(__dirname,'../../test/index.json'),'utf8',(err,data)=>{
     if(err)throw err
     let list = JSON.parse(data)
-    console.log(list.name);
+    // console.log(list.name);
     list.name = 'wtk'
     let newContent = JSON.stringify(list);
     fs.writeFile(path.join(__dirname,'../../test/index.json'), newContent, 'utf8', (err) => {

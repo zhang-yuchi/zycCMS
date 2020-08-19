@@ -2,32 +2,38 @@
 <template>
   <div class="user-page">
     <div class="user-profile">
-      <p class="name">张宇弛</p>
-      <p style="font-size:14px">欢迎使用系统</p>
+      <p class="name">{{username}}</p>
+      <p style="font-size:14px">欢迎使用{{systemName}}系统</p>
     </div>
     <div class="user-function">
-      <func title="添加新模块" path='/user/addModel'>
+      <func title="添加新模块" path="/user/addModel">
         <img src="../assets/icon/add.png" alt />
       </func>
-      <func title="数据表导入" path='/user/importDb'>
+      <func title="模块项配置" path="/user/ModelSetting">
+        <img src="../assets/icon/model.png" alt />
+      </func>
+      <func title="数据表导入" path="/user/importDb">
         <img src="../assets/icon/import.png" alt />
       </func>
-      <func title="配置项修改" path='/config'>
-        <img src="../assets/icon/config.png" alt />
-      </func>
-      <func title="数据表设置">
+      <func title="数据表查看" path="/user/tables">
         <img src="../assets/icon/table.png" alt />
       </func>
       <func title="用户组设置">
         <img src="../assets/icon/user.png" alt />
       </func>
+      <func title="配置项修改" path="/config">
+        <img src="../assets/icon/config.png" alt />
+      </func>
     </div>
     <div class="col"></div>
     <div class="user-model">
-      <model title="意见反馈">
-        <img src="../assets/icon/feed.png" alt />
+      <model title="打包指南">
+        <img src="../assets/icon/package.png" alt />
       </model>
-      <model title="退出登录" path='/login' @callback='clearToken'>
+      <model title="设置">
+        <img src="../assets/icon/setting.png" alt />
+      </model>
+      <model title="退出登录" path="/login" @callback="clearToken">
         <img src="../assets/icon/logout.png" alt />
       </model>
     </div>
@@ -39,12 +45,17 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import func from "components/function";
 import model from "components/user/model";
+import { userInfo } from 'internet/login.js'
+import configFE from '../../config.json'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: { func, model },
   data() {
     //这里存放数据
-    return {};
+    return {
+      username:"",
+      systemName:configFE.name
+    };
   },
   //监听属性 类似于data概念
   computed: {},
@@ -52,14 +63,19 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    clearToken(){
-      localStorage.setItem('token','')
-    }
+    clearToken() {
+      localStorage.setItem("token", "");
+    },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    userInfo().then(res=>{
+      console.log(res);
+      this.username = res.data.username
+    })
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
