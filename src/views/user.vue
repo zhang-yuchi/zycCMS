@@ -72,7 +72,7 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     userInfo().then(res=>{
-      console.log(res);
+      // console.log(res);
       this.username = res.data.username
     })
   },

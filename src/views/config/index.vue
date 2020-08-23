@@ -34,7 +34,7 @@
       <el-form-item style="margin-top:20px;margin-bottom:20px;">
         <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
         <el-button v-if="!fromUser" @click="resetForm('ruleForm')">重置</el-button>
-        <el-button v-if="fromUser" @click='back'>返回</el-button>
+        <el-button v-if="fromUser" @click="back">返回</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -61,7 +61,7 @@ export default {
         secretKey: "",
       },
       rules: rule,
-      fromUser:false
+      fromUser: false,
     };
   },
   //监听属性 类似于data概念
@@ -71,8 +71,13 @@ export default {
   //方法集合
   methods: {
     submitForm(formName) {
+      let comp;
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          comp = this.$toast({
+            type: "loading",
+            content: "加载中",
+          });
           putConfig(this.ruleForm).then((res) => {
             console.log(res);
           });
@@ -83,9 +88,21 @@ export default {
       });
       setTimeout(() => {
         validateDb().then((res) => {
-          console.log(res);
+          // console.log(res);
+          comp.hidden();
           if (res.status == 200) {
+            this.$toast({
+              duration:2000,
+              content:"连接成功!",
+              icon:"el-icon-check"
+            })
             this.$router.push("/login");
+          }else{
+            this.$toast({
+              duration:2000,
+              content:"链接失败,请重试",
+              icon:"el-icon-close"
+            })
           }
         });
       }, 4000);
@@ -99,12 +116,14 @@ export default {
         .then((res) => {
           const db = res.data.db;
           const security = res.data.security;
-          console.log(res);
-          this.ruleForm.dbname = db.dbName;
-          this.ruleForm.host = db.host;
-          this.ruleForm.dbport = db.port;
-          this.ruleForm.password = db.password;
-          this.ruleForm.username = db.user;
+          // console.log(res);
+          if (db) {
+            this.ruleForm.dbname = db.dbName;
+            this.ruleForm.host = db.host;
+            this.ruleForm.dbport = db.port;
+            this.ruleForm.password = db.password;
+            this.ruleForm.username = db.user;
+          }
         })
         .finally(() => {
           comp.hidden();
@@ -113,19 +132,18 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    back(){
-      this.$router.back(-1)
-    }
+    back() {
+      this.$router.back(-1);
+    },
   },
   beforeRouteEnter: (to, from, next) => {
-    console.log(from);
-    let flag = false
-    if(from.path=='/user'){
-      // this.fromUser = true
-      flag = true
+    // console.log(from);
+    let flag = false;
+    if (from.path == "/user") {
+      flag = true;
     }
-    next(vm=>{
-      vm.fromUser = flag
+    next((vm) => {
+      vm.fromUser = flag;
     });
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -146,7 +164,7 @@ export default {
 </script>
 <style lang='less'>
 .config-page {
-  padding: 60px 36px 0 36px;
+  padding: 36px 36px 30px 36px;
   .title {
     margin-bottom: 18px;
     font-size: 20px;

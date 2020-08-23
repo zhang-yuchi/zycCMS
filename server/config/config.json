@@ -2,12 +2,12 @@
   "server": {
     "port": 3000,
     "database": {
-      "dbName": "zyc",
-      "host": "localhost",
-      "port": 3306,
-      "user": "root",
-      "password": "admin"
+      "dbName": "",
+      "host": "",
+      "port": 0,
+      "user": "",
+      "password": ""
     },
-    "security": { "secretKey": "abcdefg", "expiresIn": 360000 }
+    "security": { "secretKey": "abcdefg", "expiresIn": 2592000 }
   }
 }

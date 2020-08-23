@@ -28,7 +28,7 @@
         ></el-input>
       </el-form-item>
     </el-form>
-
+    <!-- 主表 -->
     <div style="display:flex;align-items:center;margin-bottom:18px;">
       <div class="line">主表</div>
       <el-select v-model="mainTable" @change="changeSelect" placeholder="请选择">
@@ -72,6 +72,7 @@
         <el-button @click="resetForm(mainTableKeys)" size="small">重置</el-button>
       </el-form-item>
     </el-form>
+    <!-- 外表循环 -->
     <div
       class="extra"
       v-show="mainTable"
@@ -89,6 +90,11 @@
             :disabled="item.disabled"
           ></el-option>
         </el-select>
+      </div>
+      <div v-show="table.extraTable" style="margin-bottom:18px;">
+        <el-radio v-model="table.relation" label="hasOne">一对一</el-radio>
+        <el-radio v-model="table.relation" label="hasMany">一对多</el-radio>
+        <el-radio v-model="table.relation" label="belongsTo">属于</el-radio>
       </div>
       <el-form
         :model="table.extraTableKeys"
@@ -137,7 +143,12 @@
       <p style="font-size:16px;color:green;">权限设置</p>
       <el-input-number v-model="weight" :min="1" :max="127" size="small" label="请输入该模块权限"></el-input-number>
       <p></p>
-      <el-button style="margin-left:100px;margin-top:10px" size="small" type="primary">添加此模块</el-button>
+      <el-button
+        style="margin-left:100px;margin-top:10px"
+        size="small"
+        @click="submitForm"
+        type="primary"
+      >添加此模块</el-button>
     </div>
   </div>
 </template>
@@ -146,7 +157,8 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import tips from "components/tips";
-import { getModels } from "internet/model";
+import { getModels,addModel } from "internet/model";
+
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: { tips },
@@ -186,15 +198,13 @@ export default {
         this.options = arr;
       });
     },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          // console.log("error submit!!");
-          return false;
-        }
-      });
+    submitForm() {
+      if (this.modelName) {
+        // console.log(this.$data);
+        addModel(this.$data).then(res=>{
+          // console.log(res);
+        })
+      }
     },
     resetForm(form) {
       let domains = form.domains;
@@ -217,11 +227,12 @@ export default {
         value: "",
         key: Date.now(),
       });
-      console.log(table);
+      // console.log(table);
     },
     insertOneTable() {
       this.extraTables.push({
         extraTable: "",
+        relation: "hasOne",
         extraTableKeys: {
           domains: [
             {
@@ -239,18 +250,13 @@ export default {
       });
       // console.log(val);
       val.disabled = true;
-      // console.log(this.options);
+
       let tableVal = [];
       tableVal.push(this.mainTable);
       this.extraTables.map((item) => {
         tableVal.push(item.extraTable);
       });
-      // this.options.map(item=>{
-      //   console.log('1');
-      //   // tableVal.map(tab=>{
-      //   //   if(tab.item)
-      //   // })
-      // })
+
       for (let i in this.options) {
         let flag = true; //为true表示可以被表示
         for (let key of tableVal) {

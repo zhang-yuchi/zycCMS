@@ -66,9 +66,9 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // alert("submit!");
-          console.log(this.dynamicValidateForm);
+          // console.log(this.dynamicValidateForm);
           importDb(this.dynamicValidateForm).then(res=>{
-            console.log(res);
+            // console.log(res);
           })
         } else {
           

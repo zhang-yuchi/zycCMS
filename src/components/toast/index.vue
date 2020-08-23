@@ -9,6 +9,7 @@
         style="margin-right:10px"
         alt
       />
+      <i v-else-if="icon" :class="icon"></i>
       {{content}}
     </div>
   </div>
@@ -28,6 +29,7 @@ export default {
     },
     duration: Number,
     showFlag: Boolean,
+    icon:String
   },
   data() {
     //这里存放数据

@@ -13,6 +13,17 @@ class FileHelper {
       });
     })
   }
+  static jsonWritter(path,data){
+    let newContent = JSON.stringify(data)
+    // console.log(path);
+    // console.log('=====');
+    // console.log(data.extraTables);
+    // console.log('=====');
+    fs.writeFile(path, newContent, 'utf8', (err) => {
+      if (err)  throw err;
+      console.log('success done');
+    });
+  }
 }
 module.exports = {
   FileHelper

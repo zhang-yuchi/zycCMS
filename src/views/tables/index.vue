@@ -31,10 +31,10 @@ export default {
     initData() {
       let comp = this.$toast({
         type: "loading",
-        title: "加载中",
+        content: "加载中",
       });
       getModels().then((res) => {
-        console.log(res);
+        // console.log(res);
         this.tableName = res.data;
       }).finally(()=>{
         comp.hidden()

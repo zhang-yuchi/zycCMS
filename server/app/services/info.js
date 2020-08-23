@@ -5,16 +5,20 @@ const {
 const {
   Auth
 } = require('../models/auth')
-User.hasOne(Auth, {
-  foreignKey: 'uid',
-  sourceKey:'id'
-})
+const { db } = require('../../core/db')
+if (db) {
+  User.hasOne(Auth, {
+    foreignKey: 'uid',
+    sourceKey: 'id'
+  })
+}
+
 class Info {
   static async getUserInfo(id) {
-    console.log(id);
+    // console.log(id);
     return await User.findOne({
       where: {
-        id:id
+        id: id
       },
       attributes: ['id', 'username'],
       include: [{
