@@ -10,11 +10,8 @@ const createAuto = function(isAll,tables){
         directory: path.join(__dirname,'../app/models/users'), // prevents the program from writing to disk
         port: db.port,
         additional: {
-            timestamps: true,
+            timestamps: false,
             paranoid: true, //删除时间戳
-            createAt: "created_at",
-            updateAt: "updated_at",
-            deletedAt: "deleted_at",
             underscored: true, //驼峰转换成下划线
             freezeTableName: true,
         }

@@ -79,7 +79,7 @@ export default {
   width: 100%;
   height: 100%;
   .toast-window {
-    font-size: 18px;
+    font-size: 16px;
     display: inline-block;
     background-color: rgb(0, 0, 0, 0.7);
     padding: 20px;

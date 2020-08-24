@@ -18,22 +18,19 @@ export default {
         // console.log(res);
         if (!res.data.db) {
           this.$router.replace("/config");
+        } else {
+          validateDb().then((res) => {
+            // console.log(res);
+            // comp.hidden();
+            if (res.status !== 200) {
+              // console.log("need config");
+              // console.log(to);
+              this.$router.replace("/config");
+            }
+          });
         }
-      })
-      .then(() => {
-        validateDb().then((res, rej) => {
-          // console.log(res);
-          comp.hidden();
-          if (res.status !== 200) {
-            // console.log("need config");
-            // console.log(to);
-            this.$router.replace("/config");
-          } else {
-            rej();
-          }
-        });
-      })
-      .catch(() => {
+        // return
+      }).catch(() => {
         // console.log(this.$route);
         if (this.$route.path !== "/login") {
           let token = localStorage.getItem("token");

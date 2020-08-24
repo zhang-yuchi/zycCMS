@@ -25,7 +25,9 @@ const router = new Router({
 // const {
 //   db
 // } = require('../../core/db')
-// const User = require('../models/users/user')
+// // const User = require('../models/users/user')
+// const score = require('../models/users/score')
+// const { Sequelize } = require('sequelize/types')
 router.get('/', async (ctx, next) => {
   const array = findModels()
   const nameArray = array.map(item => {
@@ -59,6 +61,11 @@ router.post('/addModel', async (ctx, next) => {
   throw new Success()
 })
 router.get('/getModels', async (ctx, next) => {
-
+  // let s = await score(db,Sequelize).findOne({
+  //   where:{
+  //     id:1
+  //   }
+  // })
+  // console.log(s);
 })
 module.exports = router
